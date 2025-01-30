@@ -13,7 +13,7 @@ from test_tools.objects.booking import Booking
 class RestfulBookerClient(HTTPClient):
     """HTTP клиент для работы с сервисом restful-booker. https://restful-booker.herokuapp.com/apidoc/index.html."""
 
-    def __init__(self, username: str, password: str, endpoint: str = 'https://restful-booker.herokuapp.com'):
+    def __init__(self, username: str, password: str, endpoint: str):
         """HTTP клиент для работы с сервисом restful-booker.
 
         :param username: Логин.
