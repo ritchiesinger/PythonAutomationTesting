@@ -1,6 +1,7 @@
 """HTTP клиент для работы с сервисом restful-booker. https://restful-booker.herokuapp.com/apidoc/index.html."""
 
 from base64 import b64encode
+from logging import config, getLogger
 from typing import Any, Dict
 
 from requests import Response
@@ -8,6 +9,9 @@ from requests import Response
 from test_tools.clients.http_client import HTTPClient
 from test_tools.constants.headers import Headers, ContentType, Accept
 from test_tools.objects.booking import Booking
+
+config.fileConfig('logging.conf')
+logger = getLogger('restful_booker_client')
 
 
 class RestfulBookerClient(HTTPClient):
@@ -32,6 +36,7 @@ class RestfulBookerClient(HTTPClient):
         :param password: Пароль.
         :return: Объект ответа с авторизационным токеном в теле ответа.
         """
+        logger.info('Получение авторизационного токена.')
         body = {} | ({'username': username} if username else {}) | ({'password': password} if password else {})
         response = self.post(url=f'{self.endpoint}/auth', body=body, headers={Headers.CONTENT_TYPE: ContentType.JSON})
         if response.status_code == 200:
@@ -53,6 +58,7 @@ class RestfulBookerClient(HTTPClient):
         :param checkout: Фильтр по дате выезда.
         :return: Объект ответа со списком идентификаторов имеющихся бронирований.
         """
+        logger.info('Получение списка идентификаторов бронирований.')
         qerrystr = (
             '?' +
             (f'firstname={firstname}' if firstname else '') +
@@ -71,6 +77,7 @@ class RestfulBookerClient(HTTPClient):
             заголовок не передаётся в запросе, на уровне сервиса будет принято как `application/json`.
         :return: Объект ответа с данными запрашиваемой брони в теле.
         """
+        logger.info('Получение данных бронирования.')
         return self.get(url=f'{self.endpoint}/booking/{booking_id}', headers={Headers.ACCEPT: response_format})
 
     def create_booking(
@@ -88,6 +95,7 @@ class RestfulBookerClient(HTTPClient):
             отправляемый заголовок `Accept`. Возможные варианты: `application/json`, `application/xml`.
         :return: Объект ответа с объектом созданной брони в теле.
         """
+        logger.info('Создание бронирования.')
         headers = {Headers.ACCEPT: response_format, Headers.CONTENT_TYPE: request_format}
         return self.post(url=f'{self.endpoint}/booking', headers=headers, body=booking.output)
 
@@ -110,6 +118,7 @@ class RestfulBookerClient(HTTPClient):
             отправляемый заголовок `Accept`. Возможные варианты: `application/json`, `application/xml`.
         :return: Объект ответа с объектом созданной брони в теле.
         """
+        logger.info('Полное обновление бронирования.')
         headers = {Headers.CONTENT_TYPE: request_format, Headers.ACCEPT: response_format}
         if auth_type == 'token':
             headers[Headers.COOKIE] = f'token={self.token}'
@@ -138,6 +147,7 @@ class RestfulBookerClient(HTTPClient):
             отправляемый заголовок `Accept`. Возможные варианты: `application/json`, `application/xml`.
         :return: Объект ответа с объектом созданной брони в теле.
         """
+        logger.info('Частичное обновление бронирования.')
         headers = {Headers.CONTENT_TYPE: request_format, Headers.ACCEPT: response_format}
         if auth_type == 'token':
             headers[Headers.COOKIE] = f'token={self.token}'
@@ -153,6 +163,7 @@ class RestfulBookerClient(HTTPClient):
         :param auth_type: Тип авторизации. Возможные варианты: `token`, `basic`.
         :return: Объект ответа без тела.
         """
+        logger.info('Удаление бронирования.')
         headers = {Headers.CONTENT_TYPE: ContentType.JSON}
         if auth_type == 'token':
             headers[Headers.COOKIE] = f'token={self.token}'

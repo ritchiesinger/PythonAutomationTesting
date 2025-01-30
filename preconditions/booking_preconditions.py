@@ -19,7 +19,7 @@ def setup_booking_ceanup_list(setup_get_restful_booker_client) -> List[int]:
     cleanup_list = []
     yield cleanup_list
     client = setup_get_restful_booker_client
-    with step('Удаление созданных в тесте броинрований'):
+    with step('Удаление созданных в тесте бронирований'):
         for booking_id in cleanup_list:
             with step(f'{booking_id}'):
                 with step('Удаление бронирования'):
