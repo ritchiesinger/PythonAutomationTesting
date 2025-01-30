@@ -116,7 +116,7 @@ unsafe-load-any-extension=no
 #verbose=
 
 [MASTER]
-ignore=venv
+ignore=venv,venv312
 
 [BASIC]
 

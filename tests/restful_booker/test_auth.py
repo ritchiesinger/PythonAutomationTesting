@@ -9,7 +9,7 @@ from test_tools.constants.common import RestulBookerConstants
 @feature('Авторизация')
 @story('Получение авторизационного токена')
 @link(url=f'{RestulBookerConstants.api_docs}#api-Auth-CreateToken', name="Restful-Booker API (CreateToken)")
-class TestCreateToken:
+class TestCreateToken:  # pylint: disable=too-few-public-methods
     """Сценарии на получение авторизационного токена."""
 
     @title('Успешное получение авторизационного токена')
