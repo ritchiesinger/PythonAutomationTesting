@@ -2,3 +2,5 @@
 /venv/
 /allure_reports/
 /log.log
+/schema/grpc_example_service/GrpcExampleService_pb2.py
+/schema/grpc_example_service/GrpcExampleService_pb2_grpc.py

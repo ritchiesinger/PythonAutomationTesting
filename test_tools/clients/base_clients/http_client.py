@@ -1,14 +1,14 @@
 """Базовый HTTP клиент. От него наследуем HTTP клиенты конкретных сервисов."""
 
 from json import dumps
-from logging import config, getLogger
 from typing import Any, Dict
 
 from allure import attach, attachment_type
 from requests import Request, Response, Session, exceptions
 
-config.fileConfig('logging.conf')
-logger = getLogger('http_client')
+from test_tools.common import get_logger
+
+logger = get_logger('http_client')
 REQUEST_LOG_TEMPLATE = 'URL ЗАПРОСА: %s %s\n    ЗАГОЛОВКИ: %s\n    ТЕЛО ЗАПРОСА: %s'
 RESPONSE_LOG_TEMPLATE = 'КОД ОТВЕТА: %s\n    ЗАГОЛОВКИ: %s\n    ТЕЛО ОТВЕТА: %s'
 ALLURE_REQUEST_ATTACH_TEMPLATE = 'URL ЗАПРОСА: %s %s\nЗАГОЛОВКИ: %s\nТЕЛО ЗАПРОСА: %s'

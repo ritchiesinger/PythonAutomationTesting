@@ -2,12 +2,13 @@
 
 from datetime import datetime
 
-from allure import step, title, description, story, feature, link
+from allure import step, title, description, story, feature, link, epic
 
 from test_tools.asserters import base_asserters
-from test_tools.constants.common import RestulBookerConstants
+from test_tools.constants.restful_booker import RestulBookerConstants
 
 
+@epic('Restful-Booker')
 @feature('Бронирования')
 @story('Получение списка существующих бронирований')
 @link(url=f'{RestulBookerConstants.api_docs}#api-Booking-GetBookings', name="Restful-Booker API (GetBookingIds)")

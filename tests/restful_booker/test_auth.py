@@ -1,11 +1,12 @@
 """Тесты авторизации."""
 
-from allure import step, title, description, story, feature, link
+from allure import step, title, description, story, feature, link, epic
 
 from test_tools.asserters import base_asserters
-from test_tools.constants.common import RestulBookerConstants
+from test_tools.constants.restful_booker import RestulBookerConstants
 
 
+@epic('Restful-Booker')
 @feature('Авторизация')
 @story('Получение авторизационного токена')
 @link(url=f'{RestulBookerConstants.api_docs}#api-Auth-CreateToken', name="Restful-Booker API (CreateToken)")

@@ -1,17 +1,16 @@
 """HTTP клиент для работы с сервисом restful-booker. https://restful-booker.herokuapp.com/apidoc/index.html."""
 
 from base64 import b64encode
-from logging import config, getLogger
 from typing import Any, Dict
 
 from requests import Response
 
-from test_tools.clients.http_client import HTTPClient
+from test_tools.clients.base_clients.http_client import HTTPClient
+from test_tools.common import get_logger
 from test_tools.constants.headers import Headers, ContentType, Accept
 from test_tools.objects.booking import Booking
 
-config.fileConfig('logging.conf')
-logger = getLogger('restful_booker_client')
+logger = get_logger('restful_booker_client')
 
 
 class RestfulBookerClient(HTTPClient):
