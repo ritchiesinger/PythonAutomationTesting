@@ -1,6 +1,6 @@
 """Клиент для работы с учебным GRPC сервисом."""
 
-# pylint: disable=no-member # grpc_tools.protoc криво генерит файлы схемы. Так-то они работают.
+# pylint: disable=no-member,no-name-in-module # grpc_tools.protoc криво генерит файлы схемы. Так-то они работают.
 
 from typing import Any, Dict, List
 

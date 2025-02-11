@@ -21,4 +21,4 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Analysing the code with pylint
       run: |
-        pylint . --ignore schema
+        pylint . --rcfile .pylintrc
