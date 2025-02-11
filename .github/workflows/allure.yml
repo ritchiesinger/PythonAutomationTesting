@@ -1,0 +1,26 @@
+name: Pylint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.12"]
+    steps:
+    - name: Checkout github pages with previous Allure reports
+      uses: actions/checkout@v4
+      continue-on-error: true
+      with:
+        ref: gh-pages
+        path: gh-pages-dir
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: Run tests with Allure results
+      run: pytest --alluredir=./allure-results tests/
