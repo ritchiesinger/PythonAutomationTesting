@@ -23,27 +23,27 @@ def log_request(func):
         logger.debug(invoke_log_str)
         if method_type == GRPCMethodType.CLIENT_STREAM:
             for item_index, item in enumerate(request):
-                logger.debug(f'REQUEST MESSAGE #{item_index + 1}: {MessageToDict(item)}')
+                logger.debug('REQUEST MESSAGE #%s: %s', item_index + 1, MessageToDict(item))
                 attach_json(obj=MessageToDict(item), name=f'REQUEST MESSAGE #{item_index + 1} {verbose_url}')
         elif method_type in (GRPCMethodType.UNARY, GRPCMethodType.SERVER_STREAM):
             log_str_dict_msg = dumps(MessageToDict(request), ensure_ascii=False)
-            logger.debug(f'REQUEST MESSAGE: {log_str_dict_msg}')
+            logger.debug('REQUEST MESSAGE: %s', log_str_dict_msg)
             attach_json(obj=MessageToDict(request), name=f'REQUEST MESSAGE {verbose_url}')
         original_result = func(*args, **kwargs)
         if method_type in (GRPCMethodType.CLIENT_STREAM, GRPCMethodType.UNARY):
-            logger.debug(f'RESPONSE MESSAGE: {original_result}')
-            attach_json(obj=original_result, name=f'RESPONSE MESSAGE')
+            logger.debug('RESPONSE MESSAGE: %s', original_result)
+            attach_json(obj=original_result, name='RESPONSE MESSAGE')
         elif method_type == GRPCMethodType.SERVER_STREAM:
             for item_index, item in enumerate(original_result):
-                logger.debug(f'RESPONSE MESSAGE #{item_index + 1}: {item}')
+                logger.debug('RESPONSE MESSAGE #%s: %s', item_index + 1, item)
                 attach_json(obj=item, name=f'RESPONSE MESSAGE #{item_index + 1}')
         elif method_type == GRPCMethodType.BIDIRECTIONAL:
-            for item_index in range(len(request)):
-                request_message = MessageToDict(request[item_index])
+            for item_index, item in enumerate(request):
+                request_message = MessageToDict(item)
                 attach_json(obj=request_message, name=f'REQUEST MESSAGE #{item_index + 1} {verbose_url}')
                 attach_json(obj=original_result[item_index], name=f'RESPONSE MESSAGE #{item_index + 1}')
-                logger.debug(f'REQUEST MESSAGE #{item_index + 1}: {request_message}')
-                logger.debug(f'RESPONSE MESSAGE #{item_index + 1}: {original_result[item_index]}')
+                logger.debug('REQUEST MESSAGE #%s: %s', item_index + 1, request_message)
+                logger.debug('RESPONSE MESSAGE #%s: %s', item_index + 1, original_result[item_index])
         return original_result
     return wrapper
 

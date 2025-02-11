@@ -92,12 +92,7 @@ class TestAddUsers:
 
     @title('Получение ошибки при добавлении пользователя с уже существующим логином')
     @description('Сценарий добавления пользователя с уже существующим в системе логином.')
-    def test_add_user_already_exist_failed(
-            self,
-            setup_get_grpc_example_service_client,
-            setup_create_user_1,
-            setup_users_cleanup_list
-    ):
+    def test_add_user_already_exist_failed(self, setup_get_grpc_example_service_client, setup_create_user_1):
         already_exist_user = setup_create_user_1['addResults'][0]['userInfo']
         user_obj = {'login': already_exist_user['login'], 'email': 'richard@some.com', 'city': 'City'}
         with step('Добавление пользователя'):
