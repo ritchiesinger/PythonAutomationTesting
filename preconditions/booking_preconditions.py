@@ -33,19 +33,35 @@ def setup_booking_ceanup_list(setup_get_restful_booker_client) -> List[int]:
 
 
 @fixture
-@title('Создано бронирование 1')
-def setup_create_booking_1(setup_get_restful_booker_client, setup_booking_ceanup_list) -> Dict[str, Any]:
-    """Создано тестовое бронирование."""
+@title('Создано бронирование')
+def setup_create_booking(request, setup_get_restful_booker_client, setup_booking_ceanup_list) -> Dict[str, Any]:
+    """Создано тестовое бронирование.
+
+    Фикстура может быть параметризована. Пример декоратора над тестом:
+    @mark.parametrize("setup_create_booking", [{
+        'firstname': 'Dima',
+        'lastname': 'Kruzh',
+        'totalprice': 111,
+        'depositpaid': True,
+        'checkin': '2018-01-01',
+        'checkout': '2019-01-01',
+        'additionalneeds': 'None'
+    }], indirect=True)
+    """
     client = setup_get_restful_booker_client
-    booking_obj = Booking(
-        firstname='Dima',
-        lastname='Kruzh',
-        totalprice=111,
-        depositpaid=True,
-        checkin='2018-01-01',
-        checkout='2019-01-01',
-        additionalneeds='None'
-    ).to_json()
+    if 'param' in dir(request):
+        booking_obj_contract = request.param
+    else:
+        booking_obj_contract = {
+            'firstname': 'Dima',
+            'lastname': 'Kruzh',
+            'totalprice': 111,
+            'depositpaid': True,
+            'checkin': '2018-01-01',
+            'checkout': '2019-01-01',
+            'additionalneeds': 'None'
+        }
+    booking_obj = Booking(**booking_obj_contract).to_json()
     create_response = client.create_booking(booking=booking_obj)
     base_asserters.assert_status_code(expect=200, response=create_response)
     setup_booking_ceanup_list.append(create_response.json()['bookingid'])

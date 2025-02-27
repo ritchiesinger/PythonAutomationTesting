@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from allure import step, title, description, story, feature, link, epic
+from pytest import mark
 
 from test_tools.asserters import base_asserters
 from test_tools.constants.restful_booker import RestulBookerConstants
@@ -33,13 +34,18 @@ class TestGetBookingIds:
         'Для полноценной качественной проверки нужен доступ к БД, в которой мы бы запросили бронирования с аналогичной '
         'фильтрацией, и в тесте добавили бы проверку длины полученных списков: из БД и черезе API.'
     )
-    def test_get_booking_ids_firstname_filter_success_200(
-            self,
-            setup_get_restful_booker_client,
-            setup_create_booking_1
-    ):
+    @mark.parametrize("setup_create_booking", [{
+        'firstname': 'Dima',
+        'lastname': 'Kruzh',
+        'totalprice': 111,
+        'depositpaid': True,
+        'checkin': '2018-01-01',
+        'checkout': '2019-01-01',
+        'additionalneeds': 'None'
+    }], indirect=True)
+    def test_get_booking_ids_firstname_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking):
         client = setup_get_restful_booker_client
-        filter_value = setup_create_booking_1['booking']['firstname']
+        filter_value = setup_create_booking['booking']['firstname']
         with step('Получение списка ID существующих бронирований с фильтрацией по имени'):
             get_list_response = client.get_booking_ids(firstname=filter_value)
             base_asserters.assert_status_code(expect=200, response=get_list_response)
@@ -66,13 +72,9 @@ class TestGetBookingIds:
         'Для полноценной качественной проверки нужен доступ к БД, в которой мы бы запросили бронирования с аналогичной '
         'фильтрацией, и в тесте добавили бы проверку длины полученных списков: из БД и черезе API.'
     )
-    def test_get_booking_ids_lastname_filter_success_200(
-            self,
-            setup_get_restful_booker_client,
-            setup_create_booking_1
-    ):
+    def test_get_booking_ids_lastname_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking):
         client = setup_get_restful_booker_client
-        filter_value = setup_create_booking_1['booking']['lastname']
+        filter_value = setup_create_booking['booking']['lastname']
         with step('Получение списка ID существующих бронирований с фильтрацией по фамилии'):
             get_list_response = client.get_booking_ids(lastname=filter_value)
             base_asserters.assert_status_code(expect=200, response=get_list_response)
@@ -99,9 +101,9 @@ class TestGetBookingIds:
         'Для полноценной качественной проверки нужен доступ к БД, в которой мы бы запросили бронирования с аналогичной '
         'фильтрацией, и в тесте добавили бы проверку длины полученных списков: из БД и черезе API.'
     )
-    def test_get_booking_ids_checkin_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking_1):
+    def test_get_booking_ids_checkin_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking):
         client = setup_get_restful_booker_client
-        filter_value = setup_create_booking_1['booking']['bookingdates']['checkin']
+        filter_value = setup_create_booking['booking']['bookingdates']['checkin']
         with step('Получение списка ID существующих бронирований с фильтрацией по времени заезда'):
             get_list_response = client.get_booking_ids(checkin=filter_value)
             base_asserters.assert_status_code(expect=200, response=get_list_response)
@@ -130,9 +132,9 @@ class TestGetBookingIds:
         'Для полноценной качественной проверки нужен доступ к БД, в которой мы бы запросили бронирования с аналогичной '
         'фильтрацией, и в тесте добавили бы проверку длины полученных списков: из БД и черезе API.'
     )
-    def test_get_booking_ids_checkout_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking_1):
+    def test_get_booking_ids_checkout_filter_success_200(self, setup_get_restful_booker_client, setup_create_booking):
         client = setup_get_restful_booker_client
-        filter_value = setup_create_booking_1['booking']['bookingdates']['checkout']
+        filter_value = setup_create_booking['booking']['bookingdates']['checkout']
         with step('Получение списка ID существующих бронирований с фильтрацией по дате выезда'):
             get_list_response = client.get_booking_ids(checkout=filter_value)
             base_asserters.assert_status_code(expect=200, response=get_list_response)
